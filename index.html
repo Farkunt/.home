@@ -1,0 +1,740 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
+    <title>Kelas 5B · SDN Tanjung Barat 01</title>
+    <!-- Google Fonts & Font Awesome -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;14..32,500;14..32,600;14..32,700;14..32,800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(145deg, #b8c6db 0%, #d9e2ef 100%);
+            padding: 12px;
+            font-family: 'Inter', sans-serif;
+        }
+
+        /* ASPEK 9:16 */
+        .phone-frame {
+            width: 100%;
+            max-width: 360px;
+            height: 720px;
+            background: #ffffff;
+            border-radius: 44px;
+            box-shadow: 0 30px 50px rgba(0, 10, 30, 0.3), inset 0 0 0 2px rgba(255,255,255,0.6);
+            overflow: hidden;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .app-screen {
+            flex: 1;
+            overflow-y: auto;
+            overflow-x: hidden;
+            scroll-behavior: smooth;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            display: flex;
+            flex-direction: column;
+            padding: 20px 18px;
+            transition: background 0.4s ease, color 0.3s;
+        }
+
+        /* DARK / LIGHT VARIABLES */
+        :root {
+            --bg-primary: #f0f5fe;
+            --bg-card: #ffffff;
+            --bg-card-soft: #ffffffd9;
+            --text-primary: #1a2639;
+            --text-soft: #2d3a5e;
+            --border-light: #e9eef3;
+            --shadow: 0 12px 28px -8px rgba(0, 35, 70, 0.12);
+            --accent: #2469b5;
+            --accent-gradient: linear-gradient(135deg, #2469b5, #1e4f8a);
+            --gender-male: #2563eb;
+            --gender-female: #c44569;
+            --error: #d33f4d;
+            --overlay: rgba(255, 255, 255, 0.7);
+        }
+
+        body.dark {
+            --bg-primary: #0f172a;
+            --bg-card: #1e293b;
+            --bg-card-soft: #1e293be6;
+            --text-primary: #f1f5f9;
+            --text-soft: #cbd5e1;
+            --border-light: #334155;
+            --shadow: 0 20px 30px -10px #00000055;
+            --accent: #3b82f6;
+            --accent-gradient: linear-gradient(135deg, #3b82f6, #1d4ed8);
+            --overlay: rgba(15, 23, 42, 0.8);
+        }
+
+        /* LOGIN PAGE */
+        .login-container {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            flex: 1;
+            animation: fadeSlide 0.5s ease;
+        }
+
+        .login-card {
+            background: var(--bg-card-soft);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            padding: 36px 24px;
+            border-radius: 48px;
+            box-shadow: var(--shadow);
+            border: 1px solid var(--border-light);
+        }
+
+        .login-title {
+            font-size: 3rem;
+            font-weight: 800;
+            letter-spacing: -1px;
+            background: var(--accent-gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 28px;
+            text-align: center;
+        }
+
+        .input-group {
+            margin-bottom: 24px;
+        }
+
+        .input-group label {
+            display: block;
+            font-weight: 500;
+            margin-bottom: 8px;
+            color: var(--text-soft);
+            font-size: 0.9rem;
+        }
+
+        .input-group input {
+            width: 100%;
+            padding: 18px 20px;
+            background: var(--bg-primary);
+            border: 2px solid var(--border-light);
+            border-radius: 40px;
+            font-size: 1rem;
+            color: var(--text-primary);
+            outline: none;
+            transition: all 0.3s;
+        }
+
+        .input-group input:focus {
+            border-color: var(--accent);
+            box-shadow: 0 0 0 4px rgba(36, 105, 181, 0.2);
+        }
+
+        .gender-option {
+            display: flex;
+            gap: 15px;
+            margin-top: 8px;
+        }
+
+        .gender-option label {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            background: var(--bg-primary);
+            padding: 16px;
+            border-radius: 50px;
+            border: 2px solid var(--border-light);
+            cursor: pointer;
+            transition: all 0.2s;
+            font-weight: 600;
+        }
+
+        .gender-option input[type="radio"] {
+            display: none;
+        }
+
+        .gender-option input[type="radio"]:checked + label {
+            background: var(--accent);
+            color: white;
+            border-color: var(--accent);
+        }
+
+        .login-btn {
+            background: var(--accent-gradient);
+            color: white;
+            font-weight: 700;
+            font-size: 1.2rem;
+            padding: 18px;
+            border: none;
+            border-radius: 50px;
+            width: 100%;
+            margin-top: 18px;
+            cursor: pointer;
+            box-shadow: 0 8px 20px -5px var(--accent);
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .login-btn:active {
+            transform: scale(0.97);
+        }
+
+        .error-msg {
+            color: var(--error);
+            font-size: 0.9rem;
+            margin-top: 18px;
+            text-align: center;
+            font-weight: 600;
+            min-height: 30px;
+            padding: 10px;
+            border-radius: 50px;
+            background: rgba(211, 63, 77, 0.1);
+        }
+
+        /* LOBBY */
+        .lobby {
+            display: none;
+            flex-direction: column;
+            gap: 18px;
+            height: 100%;
+            animation: fadeSlide 0.5s ease;
+        }
+
+        .header-glass {
+            background: var(--overlay);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border-radius: 40px;
+            padding: 16px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border: 1px solid var(--border-light);
+            box-shadow: var(--shadow);
+        }
+
+        .kelas-badge {
+            font-size: 2rem;
+            font-weight: 800;
+            background: var(--accent-gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .action-group {
+            display: flex;
+            gap: 10px;
+        }
+
+        .glass-btn {
+            background: var(--overlay);
+            backdrop-filter: blur(8px);
+            border: 1px solid var(--border-light);
+            border-radius: 40px;
+            padding: 12px 18px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: var(--text-primary);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: 0.2s;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.05);
+        }
+
+        .glass-btn:active {
+            transform: scale(0.94);
+        }
+
+        .welcome-chip {
+            background: var(--accent-gradient);
+            color: white;
+            padding: 16px 22px;
+            border-radius: 60px;
+            font-weight: 600;
+            font-size: 1.1rem;
+            box-shadow: 0 10px 20px -5px var(--accent);
+            border: 1px solid rgba(255,255,255,0.2);
+            margin-bottom: 5px;
+        }
+
+        /* GRID MENU */
+        .menu-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 14px;
+            margin: 8px 0;
+        }
+
+        .menu-item {
+            background: var(--bg-card-soft);
+            backdrop-filter: blur(12px);
+            border-radius: 32px;
+            padding: 20px 12px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 12px;
+            border: 1px solid var(--border-light);
+            box-shadow: var(--shadow);
+            cursor: pointer;
+            transition: all 0.25s;
+        }
+
+        .menu-item:hover {
+            transform: translateY(-4px);
+        }
+
+        .menu-item:active {
+            transform: scale(0.96);
+        }
+
+        .menu-item i {
+            font-size: 2rem;
+            background: var(--accent-gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .menu-item span {
+            font-weight: 700;
+            font-size: 1rem;
+            color: var(--text-primary);
+        }
+
+        /* DETAIL PAGE */
+        .detail-page {
+            background: var(--bg-card);
+            border-radius: 40px;
+            padding: 24px 20px;
+            margin-top: 10px;
+            border: 1px solid var(--border-light);
+            box-shadow: var(--shadow);
+            animation: slideUp 0.4s ease;
+        }
+
+        .detail-header {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            margin-bottom: 20px;
+        }
+
+        .back-btn {
+            background: none;
+            border: none;
+            font-size: 1.6rem;
+            color: var(--accent);
+            cursor: pointer;
+            width: 44px;
+            height: 44px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 30px;
+            background: var(--overlay);
+        }
+
+        .detail-title {
+            font-size: 1.6rem;
+            font-weight: 800;
+            background: var(--accent-gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .anggota-grid {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            max-height: 380px;
+            overflow-y: auto;
+            padding: 8px 0;
+        }
+
+        .chip {
+            background: var(--bg-primary);
+            padding: 12px 22px;
+            border-radius: 60px;
+            font-weight: 600;
+            border: 1px solid var(--border-light);
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 0.95rem;
+        }
+
+        .chip.male {
+            border-left: 6px solid var(--gender-male);
+        }
+
+        .chip.female {
+            border-left: 6px solid var(--gender-female);
+        }
+
+        .jadwal-block {
+            background: var(--bg-primary);
+            padding: 18px;
+            border-radius: 30px;
+            line-height: 2;
+            font-weight: 500;
+        }
+
+        .location-block {
+            background: var(--bg-primary);
+            border-radius: 30px;
+            padding: 18px;
+            text-align: center;
+        }
+
+        .map-placeholder {
+            width: 100%;
+            height: 160px;
+            background: linear-gradient(145deg, #a3c4f0, #7fa3cf);
+            border-radius: 30px;
+            margin: 15px 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 3rem;
+            color: white;
+        }
+
+        .btn-wa {
+            background: #25D366;
+            color: white;
+            padding: 16px;
+            border-radius: 60px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            font-weight: 700;
+            margin-top: 20px;
+            border: none;
+            width: 100%;
+            cursor: pointer;
+        }
+
+        .hidden {
+            display: none !important;
+        }
+
+        @keyframes fadeSlide {
+            0% { opacity: 0; transform: translateY(20px); }
+            100% { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes slideUp {
+            0% { opacity: 0; transform: translateY(30px); }
+            100% { opacity: 1; transform: translateY(0); }
+        }
+    </style>
+</head>
+<body>
+    <div class="phone-frame">
+        <div class="app-screen" id="appScreen">
+            <!-- LOGIN PAGE -->
+            <div id="loginPage" class="login-container">
+                <div class="login-card">
+                    <div class="login-title">5B</div>
+                    <div class="input-group">
+                        <label><i class="fas fa-user"></i> Nama panggilan</label>
+                        <input type="text" id="loginName" placeholder="Masukkan nama" autocomplete="off">
+                    </div>
+                    <div class="input-group">
+                        <label><i class="fas fa-venus-mars"></i> Gender</label>
+                        <div class="gender-option">
+                            <input type="radio" name="gender" id="male" value="laki-laki" hidden>
+                            <label for="male"><i class="fas fa-mars"></i> Laki</label>
+                            <input type="radio" name="gender" id="female" value="perempuan" hidden>
+                            <label for="female"><i class="fas fa-venus"></i> Perempuan</label>
+                        </div>
+                    </div>
+                    <button class="login-btn" id="loginBtn">Masuk <i class="fas fa-arrow-right"></i></button>
+                    <div id="loginError" class="error-msg"></div>
+                </div>
+            </div>
+
+            <!-- LOBBY PAGE -->
+            <div id="lobbyPage" class="lobby">
+                <div class="header-glass">
+                    <div class="kelas-badge">5B</div>
+                    <div class="action-group">
+                        <button class="glass-btn" id="themeToggle"><i class="fas fa-moon"></i></button>
+                        <button class="glass-btn" id="logoutBtn"><i class="fas fa-sign-out-alt"></i></button>
+                    </div>
+                </div>
+
+                <!-- Welcome chip dinamis -->
+                <div class="welcome-chip" id="welcomeMsg">
+                    <i class="fas fa-smile"></i> Welcome to kelas 5B · Bu Gina
+                </div>
+
+                <!-- Grid menu -->
+                <div class="menu-grid">
+                    <div class="menu-item" id="menuTentang">
+                        <i class="fas fa-info-circle"></i>
+                        <span>Tentang Kelas</span>
+                    </div>
+                    <div class="menu-item" id="menuLaki">
+                        <i class="fas fa-mars"></i>
+                        <span>Laki-laki</span>
+                    </div>
+                    <div class="menu-item" id="menuPerempuan">
+                        <i class="fas fa-venus"></i>
+                        <span>Perempuan</span>
+                    </div>
+                    <div class="menu-item" id="menuJadwal">
+                        <i class="fas fa-calendar-alt"></i>
+                        <span>Jadwal</span>
+                    </div>
+                    <div class="menu-item" id="menuLokasi">
+                        <i class="fas fa-map-marker-alt"></i>
+                        <span>Lokasi</span>
+                    </div>
+                    <div class="menu-item" id="menuSemua">
+                        <i class="fas fa-users"></i>
+                        <span>Semua Murid</span>
+                    </div>
+                    <div class="menu-item" id="menuGrup">
+                        <i class="fab fa-whatsapp"></i>
+                        <span>Grup WA</span>
+                    </div>
+                </div>
+
+                <!-- Tempat konten detail -->
+                <div id="detailContainer" class="detail-page hidden">
+                    <!-- Diisi oleh JavaScript -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        (function() {
+            // DAFTAR MURID LENGKAP (untuk validasi & tampilan)
+            const students = [
+                { name: "adrian", gender: "laki-laki" }, { name: "eyza", gender: "laki-laki" },
+                { name: "alaric", gender: "laki-laki" }, { name: "arza", gender: "laki-laki" },
+                { name: "daffa", gender: "laki-laki" }, { name: "bintang", gender: "laki-laki" },
+                { name: "fasha", gender: "laki-laki" }, { name: "ganes", gender: "laki-laki" },
+                { name: "harun", gender: "laki-laki" }, { name: "zikri", gender: "laki-laki" },
+                { name: "kevin", gender: "laki-laki" }, { name: "taher", gender: "laki-laki" },
+                { name: "farid", gender: "laki-laki" }, { name: "deva", gender: "laki-laki" },
+                { name: "umai", gender: "laki-laki" }, { name: "wafiq", gender: "laki-laki" },
+                { name: "noval", gender: "laki-laki" }, { name: "rangga", gender: "laki-laki" },
+                { name: "abraham", gender: "laki-laki" },
+                { name: "citra", gender: "perempuan" }, { name: "delis", gender: "perempuan" },
+                { name: "deswita", gender: "perempuan" }, { name: "caca", gender: "perempuan" },
+                { name: "fanny", gender: "perempuan" }, { name: "gisel", gender: "perempuan" },
+                { name: "grace", gender: "perempuan" }, { name: "naomi", gender: "perempuan" },
+                { name: "tania", gender: "perempuan" }, { name: "salsa", gender: "perempuan" }
+            ];
+
+            // Validasi login
+            function isValidStudent(inputName, inputGender) {
+                const cleanName = inputName.trim().toLowerCase();
+                return students.some(s => s.name.toLowerCase() === cleanName && s.gender === inputGender);
+            }
+
+            // Elemen DOM
+            const loginPage = document.getElementById('loginPage');
+            const lobbyPage = document.getElementById('lobbyPage');
+            const loginBtn = document.getElementById('loginBtn');
+            const nameInput = document.getElementById('loginName');
+            const maleRadio = document.getElementById('male');
+            const femaleRadio = document.getElementById('female');
+            const loginError = document.getElementById('loginError');
+            const logoutBtn = document.getElementById('logoutBtn');
+            const themeToggle = document.getElementById('themeToggle');
+            const welcomeMsg = document.getElementById('welcomeMsg');
+            const detailContainer = document.getElementById('detailContainer');
+
+            // Menu items
+            const menuTentang = document.getElementById('menuTentang');
+            const menuLaki = document.getElementById('menuLaki');
+            const menuPerempuan = document.getElementById('menuPerempuan');
+            const menuJadwal = document.getElementById('menuJadwal');
+            const menuLokasi = document.getElementById('menuLokasi');
+            const menuSemua = document.getElementById('menuSemua');
+            const menuGrup = document.getElementById('menuGrup');
+
+            // State untuk menyimpan nama user yang login
+            let currentUserName = '';
+
+            // LOGIN
+            loginBtn.addEventListener('click', () => {
+                const name = nameInput.value.trim();
+                const gender = maleRadio.checked ? 'laki-laki' : (femaleRadio.checked ? 'perempuan' : null);
+
+                if (!name || !gender) {
+                    loginError.innerText = '⚠️ Isi nama dan pilih gender.';
+                    return;
+                }
+
+                if (isValidStudent(name, gender)) {
+                    // Login sukses
+                    loginPage.style.display = 'none';
+                    lobbyPage.style.display = 'flex';
+                    loginError.innerText = '';
+
+                    // Simpan nama yang sudah diformat
+                    const formattedName = name.charAt(0).toUpperCase() + name.slice(1).toLowerCase();
+                    currentUserName = formattedName;
+                    welcomeMsg.innerHTML = `<i class="fas fa-smile"></i> Welcome ${formattedName} · Kelas 5B`;
+
+                    // Reset form login
+                    nameInput.value = '';
+                    maleRadio.checked = false;
+                    femaleRadio.checked = false;
+                    detailContainer.classList.add('hidden');
+                } else {
+                    loginError.innerText = '❌ Nama/gender tidak cocok. Coba lagi.';
+                }
+            });
+
+            // LOGOUT
+            logoutBtn.addEventListener('click', () => {
+                lobbyPage.style.display = 'none';
+                loginPage.style.display = 'flex';
+                detailContainer.classList.add('hidden');
+                currentUserName = '';
+            });
+
+            // THEME TOGGLE
+            let darkMode = false;
+            themeToggle.addEventListener('click', () => {
+                darkMode = !darkMode;
+                document.body.classList.toggle('dark', darkMode);
+                themeToggle.innerHTML = darkMode ? '<i class="fas fa-sun"></i>' : '<i class="fas fa-moon"></i>';
+            });
+
+            // Helper: render anggota berdasarkan gender
+            function renderAnggota(genderFilter) {
+                const filtered = genderFilter === 'all' ? students : students.filter(s => s.gender === genderFilter);
+                let html = '<div class="anggota-grid">';
+                filtered.forEach(s => {
+                    const displayName = s.name.charAt(0).toUpperCase() + s.name.slice(1);
+                    const genderClass = s.gender === 'laki-laki' ? 'male' : 'female';
+                    const icon = s.gender === 'laki-laki' ? 'mars' : 'venus';
+                    html += `<span class="chip ${genderClass}"><i class="fas fa-${icon}"></i> ${displayName}</span>`;
+                });
+                html += '</div>';
+                return html;
+            }
+
+            // Fungsi untuk menampilkan halaman detail
+            function showDetail(title, content) {
+                detailContainer.classList.remove('hidden');
+                detailContainer.innerHTML = `
+                    <div class="detail-header">
+                        <button class="back-btn" id="backFromDetail"><i class="fas fa-arrow-left"></i></button>
+                        <div class="detail-title">${title}</div>
+                    </div>
+                    <div class="detail-content">${content}</div>
+                `;
+                document.getElementById('backFromDetail').addEventListener('click', () => {
+                    detailContainer.classList.add('hidden');
+                });
+            }
+
+            // EVENT MENU
+            menuTentang.addEventListener('click', () => {
+                showDetail('Tentang Kelas', `
+                    <div style="display:flex; flex-direction:column; gap:15px;">
+                        <div><i class="fas fa-chalkboard-teacher" style="color:var(--accent); width:30px;"></i> <strong>Wali Murid:</strong> Bu Gina</div>
+                        <div><i class="fas fa-broom" style="color:var(--accent);"></i> <strong>Kebersihan:</strong> Farid & Tania</div>
+                        <div><i class="fas fa-shield-alt" style="color:var(--accent);"></i> <strong>Keamanan:</strong> Eyza & Caca (Faizatunisa)</div>
+                        <div><i class="fas fa-crown" style="color:var(--accent);"></i> <strong>Ketua:</strong> Abraham</div>
+                        <div><i class="fas fa-star" style="color:var(--accent);"></i> <strong>Wakil:</strong> Naomi</div>
+                    </div>
+                `);
+            });
+
+            menuLaki.addEventListener('click', () => {
+                const content = renderAnggota('laki-laki');
+                showDetail('Laki-laki', content);
+            });
+
+            menuPerempuan.addEventListener('click', () => {
+                const content = renderAnggota('perempuan');
+                showDetail('Perempuan', content);
+            });
+
+            menuSemua.addEventListener('click', () => {
+                const content = renderAnggota('all');
+                showDetail('Semua Murid', content);
+            });
+
+            menuJadwal.addEventListener('click', () => {
+                showDetail('Jadwal', `
+                    <div class="jadwal-block">
+                        <strong>📅 Senin:</strong> MTK, PP, PAI<br>
+                        <strong>📅 Selasa:</strong> B. Indonesia, PLBJ, PJOK<br>
+                        <strong>📅 Rabu:</strong> MTK, PP, Seni Rupa<br>
+                        <strong>📅 Kamis:</strong> B. Indonesia, Ipas, B. Inggris<br>
+                        <strong>📅 Jumat:</strong> Ipas, Coding<br>
+                        <i style="display:block; margin-top:16px;">⚠️ Perubahan akan diumumkan wali kelas.</i>
+                    </div>
+                `);
+            });
+
+            menuLokasi.addEventListener('click', () => {
+                showDetail('Lokasi', `
+                    <div class="location-block">
+                        <div class="map-placeholder">
+                            <i class="fas fa-map-marked-alt"></i>
+                        </div>
+                        <h3>SDN TANJUNG BARAT 01 PAGI</h3>
+                        <p>Jl. nangka, Jakarta</p>
+                    </div>
+                `);
+            });
+
+            menuGrup.addEventListener('click', () => {
+                showDetail('Grup Kelas', `
+                    <div style="text-align:center; padding:16px;">
+                        <i class="fab fa-whatsapp" style="font-size:5rem; color:#25D366;"></i>
+                        <p style="margin:20px 0;">Klik tombol di bawah untuk membuka grup WhatsApp</p>
+                        <button class="btn-wa" id="waOpenBtn"><i class="fab fa-whatsapp"></i> Buka Grup</button>
+                    </div>
+                `);
+                // Tambahkan event listener untuk tombol WA setelah muncul
+                const waBtn = document.getElementById('waOpenBtn');
+                if (waBtn) {
+                    waBtn.addEventListener('click', () => {
+                        window.open('https://chat.whatsapp.com/GTMKa90uMFwHVE6nUqHKqG?mode=gi_t', '_blank');
+                    });
+                }
+            });
+
+            // Enter key pada input login
+            nameInput.addEventListener('keypress', (e) => {
+                if (e.key === 'Enter') loginBtn.click();
+            });
+
+            // Pastikan tidak ada konflik dengan event sebelumnya
+            // Default light mode
+        })();
+    </script>
+</body>
+</html>
